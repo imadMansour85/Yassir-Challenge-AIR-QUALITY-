@@ -1,22 +1,41 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from './air_quality.controller';
-import { AppService } from './air_quality.service';
+import moment from "moment"
+const request = require("supertest")
+const baseURL = "http://localhost:5000"
 
-describe('AppController', () => {
-  let appController: AppController;
+describe("AppController", () => {
+  const gps = { lon: 2.351666, lat: 48.856613 }
 
-  beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [AppService],
-    }).compile();
+  it("should return todos", async () => {
+    const response = await request(baseURL).get("/most_polluted_time");
 
-    appController = app.get<AppController>(AppController);
+    expect(response.body).toEqual([
+      {
+        "_id": expect.anything(),
+        "ts": expect.anything(),
+        "aqius": expect.any(Number),
+        "mainus": expect.any(String),
+        "aqicn": expect.any(Number),
+        "maincn": expect.any(String),
+        "__v": 0
+      }
+    ]);
   });
 
-  // describe('root', () => {
-  //   it('should return "Hello World!"', () => {
-  //     expect(appController.getHello()).toBe('Hello World!');
-  //   });
-  // });
+  it("should return todos", async () => {
+    const response = await request(baseURL).get(`/air_quality?lon=${gps.lon}&lat=${gps.lat}`);
+
+    console.log(response.body);
+    
+    expect(response.body.result).toEqual(
+      {
+        "ts": expect.anything(),
+        "aqius": expect.any(Number),
+        "mainus": expect.any(String),
+        "aqicn": expect.any(Number),
+        "maincn": expect.any(String),
+      }
+    );
+  });
 });
+
+

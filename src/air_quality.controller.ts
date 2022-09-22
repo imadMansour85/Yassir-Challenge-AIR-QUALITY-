@@ -21,7 +21,6 @@ export class AppController {
   @Get("most_polluted_time")
   @ApiOperation({ summary: 'the most polluted time' })
   mostPolluted(): Promise<AirQualityRecordDocument[]>  {
-    return this.appService.mostPollutedDay();
+    return this.appService.mostPollutedTime();
   }
-
 }
