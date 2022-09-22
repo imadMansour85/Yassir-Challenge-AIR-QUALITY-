@@ -1,7 +1,9 @@
 import { Controller, Get, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { AppService } from './air_quality.service';
+import { AirQualityRecordDocument } from './models/AirQualityRecord';
 import { GPS_coordinates } from './models/DTOs/GPS_coordinates_DTO';
+import {Response} from "./models/interfaces/AirQualityRecordInterface";
 
 @Controller()
 export class AppController {
@@ -12,13 +14,13 @@ export class AppController {
   @UsePipes(ValidationPipe)
   getAirQuality(
     @Query() jps_coordinates: GPS_coordinates,
-  ): any {
+  ): Promise<Response> {
     return this.appService.getAirQuality(jps_coordinates);
   }
 
   @Get("most_polluted_time")
   @ApiOperation({ summary: 'the most polluted time' })
-  mostPolluted(): any {
+  mostPolluted(): Promise<AirQualityRecordDocument[]>  {
     return this.appService.mostPollutedDay();
   }
 
